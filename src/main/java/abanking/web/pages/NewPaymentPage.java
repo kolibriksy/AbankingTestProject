@@ -43,4 +43,11 @@ public class NewPaymentPage {
         PageFactory.initElements(new HtmlElementDecorator(webDriver), this);
         this.webDriver = webDriver;
     }
+    
+    public void fillForm(String operator, String number, String accountTitle, String summ) {
+        this.operatorSelect.selectByValue(operator);
+        this.mobileNumber.sendKeys(number);
+        this.paymentSelect.selectByTitle(accountTitle);
+        this.paymentSumm.sendKeys(summ);
+    }
 }
