@@ -80,6 +80,20 @@ public class LoginPageTest {
         account.getBalance();
         
     }
+    
+    public void validationTest() {
+        driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
+        
+        NewPaymentPage paymentPage = new NewPaymentPage(driver);
+        paymentPage.sendButton.isEnabled(); //false
+        
+        paymentPage.paymentSumm.getInput().clear();
+        paymentPage.paymentSumm.getValidator(); //Поле "Сумма платежа:" обязательно для заполнения 
+        paymentPage.paymentSumm.getPlaceholder() // 0.00
+        paymentPage.mobileNumber.getValidator() //Поле "Номер телефона:" обязательно для заполнения
+        paymentPage.mobileNumber.getPlaceholder() // +7 (xxx) xx-xx-xxx
+        paymentPage.sendButton.isEnabled(); //false
+    }
 
     @After
     public void killWebDriver() {
