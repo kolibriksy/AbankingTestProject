@@ -32,12 +32,53 @@ public class LoginPageTest {
         Waiters.freezeInMilliSeconds(5000);
         mainPage.beelinePayment.click();
 
+        //todo можно сразу открыть нужный url платежа Билайн
+        driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
+        
         Waiters.freezeInMilliSeconds(10000);
         NewPaymentPage paymentPage = new NewPaymentPage(driver);
         paymentPage.operatorSelect.selectByValue("Билайн");
         Waiters.freezeInMilliSeconds(1000);
         paymentPage.paymentSumm.getInput().sendKeys("100");
         Waiters.freezeInMilliSeconds(5000);
+        
+        // todo заполняем форму данными
+        NewPaymentPage paymentPage = new NewPaymentPage(driver);
+        paymentPage.fillForm("Билайн", "9031112233", "На обед жене и детям1", "10");
+        paymentPage.sendButton.click();
+        
+        //todo ждем появления ссобщения успешного платежа
+        Waiters.freezeInMilliSeconds(10000);
+        paymentPage.NotificationOperationSuccess.isDisplayed();
+        
+        //todo проверяем что сумма на счете уменьшилась
+        driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
+        PaymentSelectOption account = 
+            paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("gfd")).findFirst().get();
+        account.getBalance();
+    }
+    
+    @Test
+    public void errorPayment() {
+        driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
+        
+        NewPaymentPage paymentPage = new NewPaymentPage(driver);
+        paymentPage.fillForm("Билайн", "9031112233", "Пенсионный", "10");
+        paymentPage.sendButton.click();
+        
+        Waiters.freezeInMilliSeconds(2000);
+        
+        ModalDialog error = paymentPage.modalDialog;
+        error.isDisplayed(); //true
+        error.getTitle(); // Операция не удалась
+        error.getMessage(); // Вклад 4256487867564 не имеет возможность снятия
+        
+        //todo проверяем что сумма на счете не изменилась
+        driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
+        PaymentSelectOption account = 
+            paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("Пенсионный")).findFirst().get();
+        account.getBalance();
+        
     }
 
     @After
