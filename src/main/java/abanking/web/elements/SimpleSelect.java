@@ -15,7 +15,7 @@ public class SimpleSelect extends AbstractElement {
     @FindBy(xpath = ".//div[contains(@class, 'select-control__list')]")
     private WebElement list;
 
-    @FindBy(xpath = ".//div[contains(@class,'select-control__data')]")
+    @FindBy(xpath = ".//div[@class = 'select-control__title']")
     private WebElement selectedValue;
 
     private String xpathList = "//select-simple//div[contains(@class, 'select-control__list')]";
@@ -46,7 +46,7 @@ public class SimpleSelect extends AbstractElement {
 
     public void openList(){
         if (list.getAttribute("class").contains("is-hidden")) {
-            list.click();
+            selectedValue.click();
         }
     }
 
