@@ -25,7 +25,7 @@ public class SimpleSelect extends AbstractElement {
         openList();
 
         List<String> result = new ArrayList<>();
-        List<WebElement> items = list.findElements(By.xpath(xpathItem));
+        List<WebElement> items = list.findElements(By.xpath(".//div[@class = 'select-control__data-title']"));
         for (WebElement item : items) {
             result.add(item.getText());
         }
@@ -35,8 +35,12 @@ public class SimpleSelect extends AbstractElement {
 
     public void selectByValue(String value){
         openList();
-        List<WebElement> items = list.findElements(By.xpath(xpathItem));
+        List<WebElement> items = list.findElements(By.xpath(".//div[@class = 'select-control__data-title']"));
+        System.out.println(items.size());
+        int i = 0;
         for (WebElement item : items) {
+            System.out.println((++i));
+            System.out.println(item.getText());
             if (value.equals(item.getText())){
                 item.click();
                 break;

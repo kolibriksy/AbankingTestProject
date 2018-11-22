@@ -1,6 +1,8 @@
 package abanking.web.pages;
 
-import abanking.web.pages.Waiters;
+import abanking.web.Waiters;
+import abanking.web.elements.ModalDialog;
+import abanking.web.elements.PaymentSelectOption;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.Before;
@@ -17,6 +19,11 @@ public class LoginPageTest {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get("https://abanking.artsofte.ru/account/login");
+
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.loginMethod("retail", "retail");
+        AbankingMainPage mainPage = new AbankingMainPage(driver);
+        Waiters.waitVisibility(driver, mainPage.paymentItem, "Ждем загрузки главной страницы");
     }
 
     @Test
@@ -43,18 +50,19 @@ public class LoginPageTest {
         Waiters.freezeInMilliSeconds(5000);
         
         // todo заполняем форму данными
-        NewPaymentPage paymentPage = new NewPaymentPage(driver);
+        //NewPaymentPage paymentPage = new NewPaymentPage(driver);
         paymentPage.fillForm("Билайн", "9031112233", "На обед жене и детям1", "10");
         paymentPage.sendButton.click();
         
         //todo ждем появления ссобщения успешного платежа
         Waiters.freezeInMilliSeconds(10000);
-        paymentPage.NotificationOperationSuccess.isDisplayed();
+        paymentPage.successMesage.isDisplayed();
         
         //todo проверяем что сумма на счете уменьшилась
         driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
-        PaymentSelectOption account = 
-            paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("gfd")).findFirst().get();
+
+        PaymentSelectOption account =
+                paymentPage.paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("gfd")).findFirst().get();
         account.getBalance();
     }
     
@@ -75,8 +83,8 @@ public class LoginPageTest {
         
         //todo проверяем что сумма на счете не изменилась
         driver.get("https://abanking.artsofte.ru/cabinet/payment/7532/721355/pay");
-        PaymentSelectOption account = 
-            paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("Пенсионный")).findFirst().get();
+        PaymentSelectOption account =
+                paymentPage.paymentSelect.getOptions().stream().filter(paymentSelectOption -> paymentSelectOption.getTitle().equals("Пенсионный")).findFirst().get();
         account.getBalance();
         
     }
@@ -89,9 +97,9 @@ public class LoginPageTest {
         
         paymentPage.paymentSumm.getInput().clear();
         paymentPage.paymentSumm.getValidator(); //Поле "Сумма платежа:" обязательно для заполнения 
-        paymentPage.paymentSumm.getPlaceholder() // 0.00
-        paymentPage.mobileNumber.getValidator() //Поле "Номер телефона:" обязательно для заполнения
-        paymentPage.mobileNumber.getPlaceholder() // +7 (xxx) xx-xx-xxx
+        paymentPage.paymentSumm.getPlaceholder(); // 0.00
+        paymentPage.mobileNumber.getValidator(); //Поле "Номер телефона:" обязательно для заполнения
+        paymentPage.mobileNumber.getPlaceholder(); // +7 (xxx) xx-xx-xxx
         paymentPage.sendButton.isEnabled(); //false
     }
 

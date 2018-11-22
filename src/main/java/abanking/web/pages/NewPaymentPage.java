@@ -1,6 +1,7 @@
 package abanking.web.pages;
 
 
+import abanking.web.Waiters;
 import abanking.web.elements.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.FindBy;
@@ -16,7 +17,7 @@ public class NewPaymentPage {
     @FindBy(xpath = "//text-control[1]")
     public TextInput mobileNumber;
 
-    @FindBy(xpath = "//text-control[2]")
+    @FindBy(xpath = "//amount-control/div")
     public TextInput paymentSumm;
 
     @FindBy(xpath = "//select-simple")
@@ -35,7 +36,7 @@ public class NewPaymentPage {
     public NotificationOperationSuccess successMesage;
 
     @FindBy(xpath = "//dlg/div")
-    private ModalDialog modalDialog;
+    public ModalDialog modalDialog;
 
     private WebDriver webDriver;
 
@@ -45,9 +46,17 @@ public class NewPaymentPage {
     }
     
     public void fillForm(String operator, String number, String accountTitle, String summ) {
-        this.operatorSelect.selectByValue(operator);
-        this.mobileNumber.sendKeys(number);
+
+//        this.mobileNumber.getInput().sendKeys(number);
+//        Waiters.freezeInMilliSeconds(1000);
+//
+//        this.paymentSumm.getInput().sendKeys(summ);
+//        Waiters.freezeInMilliSeconds(1000);
+
+//        this.operatorSelect.selectByValue(operator);
+//        Waiters.freezeInMilliSeconds(1000);
+
         this.paymentSelect.selectByTitle(accountTitle);
-        this.paymentSumm.sendKeys(summ);
+        Waiters.freezeInMilliSeconds(1000);
     }
 }

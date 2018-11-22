@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
 
-public class TextInput extends HtmlElement {
+public class TextInput extends AbstractElement {
 
     @FindBy(xpath = ".//div[contains(@class, 'form__label-container')]")
     public WebElement label;
