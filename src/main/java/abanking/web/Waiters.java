@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Waiters {
 
-    public static long timeoutInSeconds = 10;
+    public static long timeoutInSeconds = 30;
 
     public static void freezeInMilliSeconds(long milliSeconds) {
         //Try.run(() -> Thread.sleep(milliSeconds));

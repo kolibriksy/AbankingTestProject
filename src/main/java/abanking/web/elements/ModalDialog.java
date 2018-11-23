@@ -26,12 +26,12 @@ public class ModalDialog extends HtmlElement {
         }
     }
 
-    public WebElement getTitle() {
-        return title;
+    public String getTitle() {
+        return title.getText();
     }
 
-    public WebElement getMessage() {
-        return message;
+    public String getMessage() {
+        return message.getText();
     }
 
     public WebElement getCloseLink() {

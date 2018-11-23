@@ -7,6 +7,9 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+import static abanking.web.Environment.scrollIntoElement;
+import static abanking.web.Environment.webDriver;
+
 /**
  * Список "Выбор счета"
  */
@@ -32,8 +35,11 @@ public class PaymentSelect extends AbstractElement {
 
         boolean isFinding = false;
         for (PaymentSelectOption option : options) {
-            //todo проверить работу метода скролл
-            scrollIntoElement(option.getWrappedElement);
+            if (!option.getTitle().isDisplayed())
+                scrollIntoElement(option.getWrappedElement());
+
+            System.out.println(option.getTitle().getText());
+            Waiters.waitVisibility(webDriver, option.getTitle(), "Не дождались видимости элемента списка");
             if (title.equals(option.getTitle().getText())) {
                 option.getTitle().click();
                 isFinding = true;
@@ -45,7 +51,9 @@ public class PaymentSelect extends AbstractElement {
     }
 
     public void openList() {
+        scrollIntoElement(container);
         if (list.getAttribute("class").contains("is-hidden")) {
+            Waiters.waitVisibility(webDriver, container, "Не дождались видимости списка");
             container.click();
         }
     }
@@ -54,19 +62,7 @@ public class PaymentSelect extends AbstractElement {
         return selectedValue;
     }
 
-    public List<PaymentSelectOption> getOptions() {
+    private List<PaymentSelectOption> getOptions() {
         return options;
     }
-    
-    private void scrollIntoElement(WebElement webElement) {
-        //1-ый способ
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();"
-                                                              ,webElement);
-        
-        //2-ой способ
-        Actions actions = new Actions(driver);
-        actions.moveToElement(element).build().perform();
-        
-        //3-ий способ
-        ((Locatable)webElement).getLocationOnScreenOnceScrolledIntoView();
 }

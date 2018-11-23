@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
+import static abanking.web.Environment.scrollIntoElement;
+
 /**
  * Простой список "Выбор оператора"
  */
@@ -19,13 +21,13 @@ public class SimpleSelect extends AbstractElement {
     private WebElement selectedValue;
 
     private String xpathList = "//select-simple//div[contains(@class, 'select-control__list')]";
-    private String xpathItem = ".//*[text() = '%s']";
+    private final String xpathItem = ".//div[@class = 'select-control__data-title']";
 
     public List<String> getValues() {
         openList();
 
         List<String> result = new ArrayList<>();
-        List<WebElement> items = list.findElements(By.xpath(".//div[@class = 'select-control__data-title']"));
+        List<WebElement> items = list.findElements(By.xpath(xpathItem));
         for (WebElement item : items) {
             result.add(item.getText());
         }
@@ -33,40 +35,31 @@ public class SimpleSelect extends AbstractElement {
         return result;
     }
 
-    public void selectByValue(String value){
+    public void selectByValue(String value) {
         openList();
-        List<WebElement> items = list.findElements(By.xpath(".//div[@class = 'select-control__data-title']"));
+        List<WebElement> items = list.findElements(By.xpath(xpathItem));
         System.out.println(items.size());
         int i = 0;
         for (WebElement item : items) {
+            scrollIntoElement(item);
+
             System.out.println((++i));
             System.out.println(item.getText());
-            if (value.equals(item.getText())){
+            if (value.equals(item.getText())) {
                 item.click();
                 break;
             }
         }
     }
 
-    public void openList(){
+    public void openList() {
+        scrollIntoElement(selectedValue);
         if (list.getAttribute("class").contains("is-hidden")) {
             selectedValue.click();
         }
     }
 
-    public String getSelectedValue(){
+    public String getSelectedValue() {
         return selectedValue.getText();
-    }
-
-    public WebElement getLabel() {
-        return label;
-    }
-
-    public WebElement getValidator() {
-        return validator;
-    }
-
-    public WebElement getPlaceholder() {
-        return placeholder;
     }
 }

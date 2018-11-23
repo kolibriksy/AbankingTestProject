@@ -24,12 +24,12 @@ public class NotificationOperationSuccess extends HtmlElement {
     @FindBy(xpath = ".//div[contains(@class, 'action_RegularTemplate')]")
     private WebElement createRegularTemplateLink;
 
-    public WebElement getTitle() {
-        return title;
+    public String getTitle() {
+        return title.getText();
     }
 
-    public WebElement getDescription() {
-        return description;
+    public String getDescription() {
+        return description.getText();
     }
 
     public WebElement getDownloadReceiptLink() {

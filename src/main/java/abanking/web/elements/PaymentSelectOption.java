@@ -18,7 +18,7 @@ public class PaymentSelectOption extends HtmlElement {
     @FindBy(xpath = ".//div[contains(@class, 'data-desc')]")
     private WebElement account;
 
-    @FindBy(xpath = ".//div[contains(@class, 'balance')]")
+    @FindBy(xpath = ".//div[contains(@class, 'balance')]/span")
     private WebElement balance;
 
     public WebElement getTitle() {
@@ -29,7 +29,7 @@ public class PaymentSelectOption extends HtmlElement {
         return account;
     }
 
-    public WebElement getBalance() {
-        return balance;
+    public String getBalance() {
+        return balance.getAttribute("ng-reflect-balance");
     }
 }
