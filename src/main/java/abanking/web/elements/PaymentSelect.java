@@ -32,6 +32,8 @@ public class PaymentSelect extends AbstractElement {
 
         boolean isFinding = false;
         for (PaymentSelectOption option : options) {
+            //todo проверить работу метода скролл
+            scrollIntoElement(option.getWrappedElement);
             if (title.equals(option.getTitle().getText())) {
                 option.getTitle().click();
                 isFinding = true;
@@ -55,4 +57,16 @@ public class PaymentSelect extends AbstractElement {
     public List<PaymentSelectOption> getOptions() {
         return options;
     }
+    
+    private void scrollIntoElement(WebElement webElement) {
+        //1-ый способ
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();"
+                                                              ,webElement);
+        
+        //2-ой способ
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).build().perform();
+        
+        //3-ий способ
+        ((Locatable)webElement).getLocationOnScreenOnceScrolledIntoView();
 }
