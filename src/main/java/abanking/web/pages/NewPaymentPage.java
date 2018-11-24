@@ -3,6 +3,7 @@ package abanking.web.pages;
 
 import abanking.web.Waiters;
 import abanking.web.elements.*;
+import io.qameta.allure.Step;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import ru.yandex.qatools.htmlelements.element.Button;
@@ -45,10 +46,16 @@ public class NewPaymentPage {
         PageFactory.initElements(new HtmlElementDecorator(webDriver), this);
     }
 
+    @Step("Заполняем поля формы: Оператор = {operator}")
     public void fillForm(String operator, String number, String accountTitle, String summ) {
         this.operatorSelect.selectByValue(operator);
         Waiters.freezeInMilliSeconds(2000);
 
+        fillFormWoOperator(number, accountTitle, summ);
+    }
+
+    @Step("Заполняем поля формы: Номер = {number} Счет = {accountTitle} Сумма = {summ}")
+    public void fillFormWoOperator(String number, String accountTitle, String summ) {
         scrollIntoElement(this.mobileNumber.getWrappedElement());
         this.mobileNumber.getInput().clear();
         this.mobileNumber.getInput().sendKeys(number);
@@ -62,6 +69,7 @@ public class NewPaymentPage {
         Waiters.freezeInMilliSeconds(1000);
     }
 
+    @Step("Открываем страницу Платежи: Мобильная связь")
     public void openPageByUrl() {
         webDriver.get(applicationUrl + PAGE_ADDRESS);
         Waiters.waitVisibility(webDriver, this.sendButton.getWrappedElement(),

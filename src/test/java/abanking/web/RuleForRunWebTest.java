@@ -9,6 +9,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import static abanking.web.Environment.applicationUrl;
 import static abanking.web.Environment.webDriver;
+import static abanking.web.Utils.makeScreenshoot;
 
 public class RuleForRunWebTest implements TestRule {
 
@@ -19,8 +20,13 @@ public class RuleForRunWebTest implements TestRule {
             public void evaluate() throws Throwable {
                 startWebDriver();
                 loginMethod();
-                base.evaluate();
-                killWebDriver();
+                try {
+                    base.evaluate();
+                }
+                finally {
+                    makeScreenshoot();
+                    killWebDriver();
+                }
             }
         };
     }
@@ -35,7 +41,7 @@ public class RuleForRunWebTest implements TestRule {
         webDriver.get(applicationUrl + "/account/login");
         LoginPage loginPage = new LoginPage(webDriver);
         loginPage.loginMethod("retail", "retail");
-        AbankingMainPage mainPage = new AbankingMainPage(webDriver);
+        AbankingMainPage mainPage = new AbankingMainPage();
         Waiters.waitVisibility(webDriver, mainPage.paymentItem, "Ждем загрузки главной страницы");
     }
 
