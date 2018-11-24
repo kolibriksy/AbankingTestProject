@@ -7,8 +7,8 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-import static abanking.web.Environment.scrollIntoElement;
 import static abanking.web.Environment.webDriver;
+import static abanking.web.Utils.scrollIntoElement;
 
 /**
  * Список "Выбор счета"
@@ -30,7 +30,6 @@ public class PaymentSelect extends AbstractElement {
     public void selectByTitle(String title) {
         openList();
 
-        Waiters.freezeInMilliSeconds(1000);
         List<PaymentSelectOption> options = getOptions();
 
         boolean isFinding = false;

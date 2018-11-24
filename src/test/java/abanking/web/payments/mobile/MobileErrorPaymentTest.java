@@ -13,8 +13,8 @@ import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static abanking.web.Environment.scrollIntoElement;
 import static abanking.web.Environment.webDriver;
+import static abanking.web.Utils.scrollIntoElement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
 
@@ -23,7 +23,7 @@ public class MobileErrorPaymentTest {
     @Rule
     public RuleForRunWebTest rule = new RuleForRunWebTest();
 
-    @Test
+    @Test()
     @Description("Проверка запрета платежа с вкладного счета")
     @Feature("Оплата.Мобильная связь")
     public void errorPaymentTest() {
@@ -78,7 +78,7 @@ public class MobileErrorPaymentTest {
         ModalDialog error = paymentPage.modalDialog;
         checkErrorModalDialog(error,
                 "Операция не удалась",
-                "Вклад 42305810688800000111 не имеет возможность снятия");
+                "Счет 0817810100000005544 не имеет возможность снятия");
 
         // обновим стр и проверим что баланс счета не изменился
         paymentPage.openPageByUrl();

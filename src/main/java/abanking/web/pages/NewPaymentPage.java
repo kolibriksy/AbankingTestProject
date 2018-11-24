@@ -10,6 +10,7 @@ import ru.yandex.qatools.htmlelements.element.Button;
 import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
 
 import static abanking.web.Environment.*;
+import static abanking.web.Utils.scrollIntoElement;
 
 /**
  * Страница Новый платеж

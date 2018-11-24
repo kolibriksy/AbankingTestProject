@@ -12,14 +12,37 @@ import io.qameta.allure.Step;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import static abanking.web.Environment.scrollIntoElement;
+import java.util.Arrays;
+import java.util.Collection;
+
 import static abanking.web.Environment.webDriver;
 import static abanking.web.Utils.formatDecimalToString;
+import static abanking.web.Utils.scrollIntoElement;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringWhiteSpace;
 
+@RunWith(value = Parameterized.class)
 public class MobileSuccessPaymentTest {
+
+    private String accountTitle;
+    private String summ;
+
+    public MobileSuccessPaymentTest(String accountTitle, String summ) {
+        this.accountTitle = accountTitle;
+        this.summ = summ;
+    }
+
+    @Parameterized.Parameters(name = "Счет = {0} | Сумма = {1}")
+    public static Collection<Object[]> data() {
+        Object[][] data = new Object[][]{
+                {"Счет с очень длинным названием. Очень-очень длинное название, слишком, чтобы влезть в строку", "10"},
+                {"На обед жене и детям1", "15.50"}
+        };
+        return Arrays.asList(data);
+    }
 
     @Rule
     public RuleForRunWebTest rule = new RuleForRunWebTest();
@@ -28,9 +51,8 @@ public class MobileSuccessPaymentTest {
     @Description("Проверка успешного платежа")
     @Feature("Оплата.Мобильная связь")
     public void successPaymentTest1() {
-        String accountTitle =
-                "Счет с очень длинным названием. Очень-очень длинное название, слишком, чтобы влезть в строку";
-        String summ = "10";
+        String accountTitle = this.accountTitle;
+        String summ = this.summ;
 
         // заполним поля для платежа
         NewPaymentPage paymentPage = new NewPaymentPage();
@@ -57,54 +79,6 @@ public class MobileSuccessPaymentTest {
 
         PaymentSelect paymentSelect = paymentPage.paymentSelect;
         checkAccountBalance(paymentSelect, accountTitle, formattedExpectedBalance);
-
-        /*paymentPage.paymentSelect.selectByTitle(accountTitle);
-        PaymentSelectOption selectOption = paymentPage.paymentSelect.getSelectedValue();
-        String balanceAfterPayment = selectOption.getBalance();
-        String formattedBalanceAfterPayment = formatDecimalToString(Double.valueOf(balanceAfterPayment));
-        System.out.println(formattedBalanceAfterPayment);
-        assertThat(formattedBalanceAfterPayment, equalToIgnoringWhiteSpace(formattedExpectedBalance));*/
-    }
-
-    @Test
-    @Description("Проверка успешного платежа")
-    @Feature("Оплата.Мобильная связь")
-    public void successPaymentTest2() {
-        String accountTitle = "На обед жене и детям1";
-        String summ = "15.10";
-
-        // заполним поля для платежа
-        NewPaymentPage paymentPage = new NewPaymentPage();
-        paymentPage.openPageByUrl();
-        paymentPage.fillFormWoOperator("89031112233", accountTitle, summ);
-
-        //запомним баланс счета до списания
-        String balanceBeforePayment = paymentPage.paymentSelect.getSelectedValue().getBalance();
-        double expectedBalance = Double.valueOf(balanceBeforePayment) - Double.valueOf(summ);
-        String formattedExpectedBalance = formatDecimalToString(expectedBalance);
-        System.out.println(formattedExpectedBalance);
-
-        scrollIntoElement(paymentPage.sendButton.getWrappedElement());
-        paymentPage.sendButton.click();
-
-        // проверим появление сообщения об успешной оплате
-        NotificationOperationSuccess successMesage = paymentPage.successMesage;
-        checkSuccessMessage(successMesage,
-                "Операция успешно выполнена.",
-                "После отправления средств можете обратиться в банк за подтверждением об оплате.");
-
-        // обновим стр и проверим что баланс счета уменьшился на сумму платежа
-        paymentPage.openPageByUrl();
-
-        PaymentSelect paymentSelect = paymentPage.paymentSelect;
-        checkAccountBalance(paymentSelect, accountTitle, formattedExpectedBalance);
-
-        /*paymentPage.paymentSelect.selectByTitle(accountTitle);
-        PaymentSelectOption selectOption = paymentPage.paymentSelect.getSelectedValue();
-        String balanceAfterPayment = selectOption.getBalance();
-        String formattedBalanceAfterPayment = formatDecimalToString(Double.valueOf(balanceAfterPayment));
-        System.out.println(formattedBalanceAfterPayment);
-        assertThat(formattedBalanceAfterPayment, equalToIgnoringWhiteSpace(formattedExpectedBalance));*/
     }
 
     @Step("Проверим сообщение об успешной операции")

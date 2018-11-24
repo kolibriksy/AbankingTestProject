@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static abanking.web.Environment.scrollIntoElement;
+import static abanking.web.Utils.scrollIntoElement;
 
 /**
  * Простой список "Выбор оператора"
@@ -20,7 +20,6 @@ public class SimpleSelect extends AbstractElement {
     @FindBy(xpath = ".//div[@class = 'select-control__title']")
     private WebElement selectedValue;
 
-    private String xpathList = "//select-simple//div[contains(@class, 'select-control__list')]";
     private final String xpathItem = ".//div[@class = 'select-control__data-title']";
 
     public List<String> getValues() {

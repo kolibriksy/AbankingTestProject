@@ -11,8 +11,6 @@ public class Waiters {
     public static long timeoutInSeconds = 30;
 
     public static void freezeInMilliSeconds(long milliSeconds) {
-        //Try.run(() -> Thread.sleep(milliSeconds));
-
         try {
             Thread.sleep(milliSeconds);
         } catch (InterruptedException e) {
